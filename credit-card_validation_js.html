@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Card-Validation Demo</title>
+  <meta name="description" content="Validation of Credit Card Using Javascript">
+  <meta name="author" content="Alex Owusu">
+  <script type='text/javascript'>
+		
+	function validate(){
+		  var card_number, text;
+
+		  // Get the value of the input field with id="numb"
+		  card_number = document.getElementById("numb").value;
+		  strip_card_number= card_number.replace(/-/g,'');
+		  console.log('Stripped_CardNumber::'+ strip_card_number);
+		
+		  if(card_number.length==0){			  
+			  text ='<span style="color:red;">*Enter Credit Card Number</span><br>';	
+			  document.getElementById('result').innerHTML=text;
+			  document.getElementById("numb").focus();	
+				return ;
+		  }
+		 if(strip_card_number.length > 16 || strip_card_number.length < 16){
+			  text ='<span style="color:red;">*{valid: false, number: '+ card_number +', error: ‘wrong_length’ }</span><br>';
+			  document.getElementById('result').innerHTML=text;			  
+			  document.getElementById("numb").focus();	
+			console.log('{valid: false, number: '+card_number+', error: ‘wrong_length’ }');
+			return ;
+		}
+			
+		var lastDigit = strip_card_number.toString().slice(-1);
+		console.log('lastDigit: '+lastDigit);
+		
+		if(isNaN(strip_card_number)){
+			 text ='<span style="color:red;">*{valid: false, number: '+ card_number +', error: ‘Not_Number’ }</span><br>';		  
+			 console.log('{valid: false, number: '+ card_number +', error: ‘Not_Number’ }');
+			 document.getElementById('result').innerHTML=text;
+			 document.getElementById("numb").focus();	
+			return ;
+		}
+		else{
+				var	sum_digits=0;
+				var non_repeat=true;
+				console.log('digits_length:: '+strip_card_number.length);
+				for(i=0; i < strip_card_number.length; i++)
+				{
+					sum_digits += parseInt(strip_card_number.charAt(i));
+					if(i > 1)
+					{
+						if ((parseInt(strip_card_number.charAt(i)) > parseInt(strip_card_number.charAt(i-1))) || (parseInt(strip_card_number.charAt(i)) < parseInt(strip_card_number.charAt(i-1))))
+						{
+							console.log(parseInt(strip_card_number.charAt(i)));
+							console.log(parseInt(strip_card_number.charAt(i-1)));
+							non_repeat=false;
+						}
+					}
+				}  
+		}
+		if(!(lastDigit % 2 == '0')){
+			console.log('{valid: false, number: '+card_number+', error: ‘odd_lastDigit’ }');
+			 text ='<span style="color:red;">*{valid: false, number: '+ card_number +', error: ‘odd_lastDigit’ }</span><br>';
+			 document.getElementById('result').innerHTML=text;			  
+			 document.getElementById("numb").focus();
+			return ;
+		}
+		if(non_repeat){
+			 text ='<span style="color:red;">*{valid: false, number: '+ card_number +', error: ‘Only_oneType_Number’ }</span><br>';
+			 document.getElementById('result').innerHTML=text;			  
+			 document.getElementById("numb").focus();
+			 return;
+		}
+		if(sum_digits < 16){
+			  text ='<span style="color:red;">*{valid: false, number: '+ card_number +', error: ‘sum less than 16’ }</span><br>';
+			  console.log('{valid: false, number: '+card_number+', error: ‘sum less than 16’}');
+			  document.getElementById('result').innerHTML=text;			  
+			  document.getElementById("numb").focus();	
+			return ;
+		}
+
+		
+		// Run Below if all Validation checks Pass!!!
+			text ='<span style="color:green; font-weight:bold;">{Valid: True, Number: '+ card_number +', Message: ‘Credit Card Valid’ }</span><br>';
+		    document.getElementById('result').innerHTML=text;	
+		    console.log('{Valid: True, Number: '+card_number+', Msg: ‘Credit Card Valid’ }');
+	}
+</script>
+</head>
+<body>
+<p><b>The Credit Card Validator</em> </b></p>
+<input id="numb" >
+<button type="button" onclick="validate()">Submit</button><br><br>
+<small>Format: xxxx-xxxx-xxxx-xxxx</small><br><br>
+<div id="result" style="color:black; font-size:medium; margin:0; padding:0"></span>
+</body>
+</html>
